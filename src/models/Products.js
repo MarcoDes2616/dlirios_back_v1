@@ -31,20 +31,20 @@ const Products = sequelize.define( "products", {
   }
 );
 
-// Products.afterFind(async (data) => {
-//   if (data.dataValues) {
-//     const img = await getImgUrl(data.image);
-//     data.image = img;
-//     return;
-//   }
-//   const urls = data.map(async (item) => {
-//     if (item.image) {
-//       const img = await getImgUrl(item.image);
-//       item.image = img;
-//     }
-//   });
-//   await Promise.all(urls); // map async
-//   return data;
-// });
+Products.afterFind(async (data) => {
+  if (data.dataValues) {
+    const img = await getImgUrl(data.image);
+    data.image = img;
+    return;
+  }
+  const urls = data.map(async (item) => {
+    if (item.image) {
+      const img = await getImgUrl(item.image);
+      item.image = img;
+    }
+  });
+  await Promise.all(urls); // map async
+  return data;
+});
 
 module.exports = Products;

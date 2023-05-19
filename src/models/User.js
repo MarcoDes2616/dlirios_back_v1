@@ -48,24 +48,24 @@ User.beforeCreate(async(user) => {
     user.password = hashedPassword
 })
 
-// User.afterFind(async(user) => {
-//     if (user.dataValues) {
-//         if (user.dataValues.image) {
-//             const img = await getImgUrl(user.image)
-//             user.image = img
-//             return user
-//         }
-//         return user
-//     }
-//     const urls = user.map(async(item) => {
-//         if(item.image){
-//             const img = await getImgUrl(item.image)
-//             item.image = img
-//         }
-//     })
-//     await Promise.all(urls) // map async
-//     return user
-// })
+User.afterFind(async(user) => {
+    if (user.dataValues) {
+        if (user.dataValues.image) {
+            const img = await getImgUrl(user.image)
+            user.image = img
+            return user
+        }
+        return user
+    }
+    const urls = user.map(async(item) => {
+        if(item.image){
+            const img = await getImgUrl(item.image)
+            item.image = img
+        }
+    })
+    await Promise.all(urls) // map async
+    return user
+})
 
 User.prototype.toJSON = function () {
     const values = Object.assign({}, this.get());
