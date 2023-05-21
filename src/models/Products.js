@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../utils/connection");
-// const { getImgUrl } = require("../middleware/firebase.middleware");
+const { getImgUrl } = require("../middleware/firebase.middleware");
 
 const Products = sequelize.define( "products", {
     name: {
