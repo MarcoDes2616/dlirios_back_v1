@@ -2,7 +2,9 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../utils/connection");
 const { getImgUrl } = require("../middleware/firebase.middleware");
 
-const Products = sequelize.define( "products", {
+const Products = sequelize.define(
+  "products",
+  {
     name: {
       type: DataTypes.STRING(30),
       allowNull: false,
@@ -24,7 +26,7 @@ const Products = sequelize.define( "products", {
       type: DataTypes.TEXT,
       unique: true,
       allowNull: false,
-    }
+    },
   },
   {
     timestamps: false,
@@ -38,10 +40,8 @@ Products.afterFind(async (data) => {
     return;
   }
   const urls = data.map(async (item) => {
-    if (item.image) {
-      const img = await getImgUrl(item.image);
-      item.image = img;
-    }
+    const img = await getImgUrl(item.image);
+    item.image = img;
   });
   await Promise.all(urls); // map async
   return data;

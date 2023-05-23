@@ -2,8 +2,27 @@ const catchError = require("../utils/catchError");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendMail");
-const Pet = require("../models/Pet");
 require("dotenv").config();
+
+
+const getAll = catchError(async(req, res) => {
+    const results = await User.findAll();
+    return res.json(results);
+});
+
+
+const getOne = catchError(async(req, res) => {
+    const { id } = req.params;
+    const result = await User.findByPk(id);
+    if(!result) return res.sendStatus(404);
+    return res.json(result);
+});
+
+const remove = catchError(async(req, res) => {
+    const { id } = req.params;
+    await User.destroy({ where: {id} });
+    return res.sendStatus(204);
+});
 
 
 // ENDPOINT DE USUARIO 1 --- CREAR USUARIO CLIENTE
@@ -33,10 +52,12 @@ const update = catchError(async (req, res) => {
     if (result[0] === 0) return res.sendStatus(404);
     return res.json(result[1][0]);
   });
-  
 
 
 module.exports = {
-  create,
-  update,
-};
+    getAll,
+    create,
+    getOne,
+    remove,
+    update
+}

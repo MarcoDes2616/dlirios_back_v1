@@ -14,6 +14,7 @@ const firebaseFile = async(req, res, next) => {
 
 const getImgUrl = async(img) => {
     try {
+        if(!img) return
         const newRef = ref(storage, img)
         const url = await getDownloadURL(newRef)
         return url
