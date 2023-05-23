@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../utils/connection");
 const bcrypt = require("bcrypt");
-// const { getImgUrl } = require('../middleware/firebase.middleware');
+const { getImgUrl } = require('../middleware/firebase.middleware');
 
 const User = sequelize.define(
   "users",
@@ -67,7 +67,6 @@ User.afterFind(async (user) => {
 User.prototype.toJSON = function () {
   const values = Object.assign({}, this.get());
   delete values.password;
-  delete values.resetCode;
   delete values.createdAt;
   return values;
 };

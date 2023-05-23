@@ -10,6 +10,11 @@ const getAll = catchError(async(req, res) => {
     return res.json(results);
 });
 
+const getAllActive = catchError(async(req, res) => {
+  const results = await User.findAll({where: {status: true}});
+  return res.json(results);
+});
+
 
 const getOne = catchError(async(req, res) => {
     const { id } = req.params;
@@ -20,7 +25,8 @@ const getOne = catchError(async(req, res) => {
 
 const remove = catchError(async(req, res) => {
     const { id } = req.params;
-    await User.destroy({ where: {id} });
+    const result = await User.findByPk(id);
+    await User.update( {status: !result.status}, { where: {id} });
     return res.sendStatus(204);
 });
 
@@ -59,5 +65,6 @@ module.exports = {
     create,
     getOne,
     remove,
-    update
+    update,
+    getAllActive
 }
